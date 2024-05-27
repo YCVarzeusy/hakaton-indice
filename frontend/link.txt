@@ -1,0 +1,7 @@
+
+Prototipo
+https://www.figma.com/design/4Y9LIzw44w4nOCaXVu0Jrh/Hakaton?node-id=0-1&t=q1nOCHmOYhFZAwUg-1
+
+repo de frontend
+https://github.com/YCVarzeusy/hakaton-front
+

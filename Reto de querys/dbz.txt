@@ -1,0 +1,160 @@
+--1.----------------------------------------------------------------------------------------
+SELECT 
+    race,
+    SUM(CASE WHEN gender = 'Male' THEN 1 ELSE 0 END) AS male,
+    SUM(CASE WHEN gender = 'Female' THEN 1 ELSE 0 END) AS female
+FROM 
+    TPersonaje
+GROUP BY 
+    race;
+
+--2.----------------------------------------------------------------------------------------
+
+
+
+DECLARE @Personajes TABLE(id INT, name varchar(50), race varchar(50),  NumericValueKi  DECIMAL(38, 0), MultiplierKi DECIMAL(38, 0),NumericValueMaxKi  DECIMAL(38, 0), MultiplierMaxKi DECIMAL(38, 0) );
+   
+insert into @Personajes
+SELECT
+	id,
+    name,
+    race,
+     CASE
+        WHEN ki  LIKE '% Googolplex' THEN CAST(REPLACE(ki, ' Googolplex', '') AS DECIMAL(38, 0))
+        WHEN ki LIKE '% Sextillion' THEN CAST(REPLACE(ki, ' Sextillion', '') AS DECIMAL(38, 0))
+        WHEN ki LIKE '% Quintillion' THEN CAST(REPLACE(ki, ' Quintillion', '') AS DECIMAL(38, 0))
+        WHEN ki LIKE '% Quadrillion' THEN CAST(REPLACE(ki, ' Quadrillion', '') AS DECIMAL(38, 0))
+        WHEN ki LIKE '% Trillion' THEN CAST(REPLACE(ki, ' Trillion', '') AS DECIMAL(38, 0))
+        WHEN ki LIKE '% Billion' THEN CAST(REPLACE(ki, ' Billion', '') AS DECIMAL(38, 0))
+        WHEN ki LIKE '% Septillion' THEN CAST(REPLACE(ki, ' Septillion', '') AS DECIMAL(38, 0))
+        WHEN ki LIKE '% septllion' THEN CAST(REPLACE(ki, ' septllion', '') AS DECIMAL(38, 0))
+        WHEN ki LIKE '%unknown' THEN 0
+        ELSE CAST(REPLACE(REPLACE(ki, ',','') , '.','') AS DECIMAL(38, 0))
+    END AS NumericValueKi,    
+       CASE
+            WHEN ki LIKE '% Googolplex' THEN POWER(10, 9) 
+            WHEN ki LIKE '% Sextillion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 21)
+            WHEN ki LIKE '% Quintillion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 18)
+            WHEN ki LIKE '% Quadrillion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 15)
+            WHEN ki LIKE '% Trillion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 12)
+            WHEN ki LIKE '% Billion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 9)
+            WHEN ki LIKE '% Septillion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 24)
+            WHEN ki LIKE '% septllion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 24)
+            ELSE 1
+        END AS MultiplierKi,
+    CASE
+        WHEN maxKi LIKE '% Googolplex' THEN CAST(REPLACE(maxKi, ' Googolplex', '') AS DECIMAL(38, 0))
+        WHEN maxKi LIKE '% Sextillion' THEN CAST(REPLACE(maxKi, ' Sextillion', '') AS DECIMAL(38, 0))
+        WHEN maxKi LIKE '% Quintillion' THEN CAST(REPLACE(maxKi, ' Quintillion', '') AS DECIMAL(38, 0))
+        WHEN maxKi LIKE '% Quadrillion' THEN CAST(REPLACE(maxKi, ' Quadrillion', '') AS DECIMAL(38, 0))
+        WHEN maxKi LIKE '% Trillion' THEN CAST(REPLACE(maxKi, ' Trillion', '') AS DECIMAL(38, 0))
+        WHEN maxKi LIKE '% Billion' THEN CAST(REPLACE(maxKi, ' Billion', '') AS DECIMAL(38, 0))
+        WHEN maxKi LIKE '% Septillion' THEN CAST(REPLACE(maxKi, ' Septillion', '') AS DECIMAL(38, 0))
+        WHEN maxKi LIKE '% septllion' THEN CAST(REPLACE(maxKi, ' septllion', '') AS DECIMAL(38, 0))
+        WHEN maxKi LIKE '%unknown' THEN 0
+        ELSE CAST(REPLACE(REPLACE(maxKi, ',','') , '.','') AS DECIMAL(38, 0))
+    END AS NumericValueMaxKi,
+       CASE
+            WHEN maxKi LIKE '% Googolplex' THEN POWER(10, 9) 
+            WHEN maxKi LIKE '% Sextillion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 21)
+            WHEN maxKi LIKE '% Quintillion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 18)
+            WHEN maxKi LIKE '% Quadrillion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 15)
+            WHEN maxKi LIKE '% Trillion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 12)
+            WHEN maxKi LIKE '% Billion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 9)
+            WHEN maxKi LIKE '% Septillion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 24)
+            WHEN maxKi LIKE '% septllion' THEN POWER(CAST(10 AS DECIMAL(38, 0)), 24)
+            ELSE 1
+        END AS MultiplierMaxKi
+FROM
+    TPersonaje
+   ;
+   
+   SELECT * from @Personajes
+
+
+
+
+--3.----------------------------------------------------------------------------------------
+
+   
+select name, ( NumericValueMaxKi * MultiplierMaxKi- numericValueKi * MultiplierKi ) brecha from   @Personajes
+order by brecha asc
+
+
+--4.----------------------------------------------------------------------------------------
+
+    select * from (
+    SELECT 
+        id, 
+        name, 
+       MultiplierMaxKi,
+       NumericValueMaxKi,
+        race,
+        ROW_NUMBER() OVER (PARTITION BY race ORDER BY MultiplierMaxKi DESC, NumericValueMaxKi desc ) AS rn
+    FROM @Personajes
+  ) ranked
+    where  rn = 1
+
+ 
+
+--5.----------------------------------------------------------------------------------------
+
+  select * from (
+    SELECT 
+        id, 
+        name, 
+        MultiplierMaxKi,
+       NumericValueMaxKi,
+        race,
+        ROW_NUMBER() OVER (PARTITION BY race ORDER BY MultiplierMaxKi asc, NumericValueMaxKi asc ) AS rn
+    FROM @Personajes
+    where race = 'God'
+  ) ranked
+    where  rn = 1
+
+
+--6.----------------------------------------------------------------------------------------
+
+
+SELECT 
+  name, 
+ (LEN(description) - LEN(REPLACE(description, p.name, ''))) / LEN(p.name) AS Apariciones
+from TPersonaje p
+
+
+--7.----------------------------------------------------------------------------------------
+
+SELECT
+    name ,
+    REVERSE(name) AS NombreInvertido
+FROM
+    TPersonaje ;
+
+
+
+--8.----------------------------------------------------------------------------------------
+
+  
+
+SELECT *
+FROM (
+     SELECT 
+	   race,
+	   AVG(MultiplierMaxKi) avgmaxKi
+    FROM @Personajes
+    group by race 
+) AS avgByRace
+PIVOT (
+    AVG(avgmaxKi)
+    FOR race IN ([Saiyan], [Namekian], [Human], [Android], [Majin], [Angel], [Evil], [Frieza Race], [God], [Jiren Race] , [Nucleico], [Nucleico benigno], [Unknown] )
+) AS PivotTable;
+
+
+
+
+
+--9.----------------------------------------------------------------------------------------
+
+
+
+

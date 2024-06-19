@@ -5,3 +5,6 @@ https://www.figma.com/design/4Y9LIzw44w4nOCaXVu0Jrh/Hakaton?node-id=0-1&t=q1nOCH
 repo de frontend
 https://github.com/YCVarzeusy/hakaton-front
 
+copiar el archivo .env que se encuentra en la ruta src/env/.env.dev
+en la ruta raiz /
+

@@ -1,1 +1,10 @@
 https://rsi4jhcnn8.execute-api.us-east-1.amazonaws.com/api
+
+--------------------------------------Sign in--------------------------------------
+https://3j8g104s36.execute-api.us-east-1.amazonaws.com/api/user/signin/
+body: {"email": "admin@test.com", "password": "123456"}
+Tipo:POST
+
+---------------------------------listado de peleadores ---------------------------
+https://rsi4jhcnn8.execute-api.us-east-1.amazonaws.com/api/fighter
+tipo: GET

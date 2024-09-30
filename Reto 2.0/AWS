@@ -1,0 +1,10 @@
+https://22lvmzx4ee.execute-api.us-east-1.amazonaws.com/api
+
+--------------------------------------Sign in--------------------------------------
+https://22lvmzx4ee.execute-api.us-east-1.amazonaws.com/api/user/signin/
+body: {"email": "admin@test.com", "password": "123456"}
+Tipo:POST
+
+---------------------------------listado de peleadores ---------------------------
+https://22lvmzx4ee.execute-api.us-east-1.amazonaws.com/api/fighter
+tipo: GET

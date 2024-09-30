@@ -8,3 +8,7 @@ Tipo:POST
 ---------------------------------listado de peleadores ---------------------------
 https://22lvmzx4ee.execute-api.us-east-1.amazonaws.com/api/fighter
 tipo: GET
+
+
+--------------------------Base de datos-----------------------------------------------
+https://supabase.com/dashboard/project/dnefekuhmzrnuhitswvu/editor
